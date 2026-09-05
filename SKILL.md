@@ -188,7 +188,7 @@ design-workflow/
 | 做 **IP / 软件 / 品牌专属图形**（要专属、可控、无第三方署名） | `design-icon-batch` 第六、七节（AI 生图 + 抠图批量）/ `design-ip-assets` |
 | 输入是一张真实照片，"以照片为起点设计/加手绘线稿/live photo" | `design-photo-sketch` |
 | 载体是 UI/网页/数字产品，要"不像 AI 模板/UX 文案/动效克制" | `design-frontend` |
-| 载体是**手机 App 界面/原型**，且"像 AI slop（只换皮肤不换骨架/卡片等距堆叠）/ 要移动结构感/拇指热区/safe area/底部导航/bottom sheet" | `design-mobile-app`（含**写 APP 两步标准流程**：① 线框图默认起步 ② 全流程巡查开发中贯穿；可选**注意力热力图**视觉权重自检；结构立住后由 `design-frontend` 收文案与动效意图） |
+| 载体是**手机 App 界面/原型**，且"像 AI slop（只换皮肤不换骨架/卡片等距堆叠）/ 要移动结构感/拇指热区/safe area/底部导航/bottom sheet" | `design-mobile-app`（含**写 APP 两步标准流程**：① 线框图默认起步 ② 全流程巡查开发中贯穿；结构立住后由 `design-frontend` 收文案与动效意图） |
 | 走「模式 2 吸睛」要"注入独特品味/强传播记忆点/反套路审美" | `design-taste` |
 | 要"给这个组件几个方向看看/同一 UI 件做多个真正不同的版本发散探索" | `design-prototype-divergence`（模式2探索最顺） |
 | 问"这个动效叫什么/把模糊的动效描述翻成确切术语去 prompt AI/设计师" | `design-motion-vocabulary`（反查词典，命名而非设计） |
