@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>design-workflow 技能结构图谱</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --line:#2a2f3a; --txt:#e6e9ef;
+    --muted:#8b93a3; --accent:#5b9dff; --green:#46c08a; --purple:#b07cff;
+    --orange:#ff9f5b; --pink:#ff6b9d; --cyan:#3fd0d6; --yellow:#ffd24a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.6;padding:28px}
+  h1{font-size:22px;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:22px;font-size:12px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+  .dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+  /* 三层卡片区 */
+  .grid{display:grid;grid-template-columns:1fr;gap:18px;max-width:1180px;margin:0 auto}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card>h2{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;padding:2px 8px;border-radius:20px;background:#21262f;color:var(--muted)}
+  /* 五层流程 */
+  .flow{display:flex;flex-direction:column;gap:0;position:relative}
+  .layer{display:flex;gap:14px;align-items:stretch}
+  .layer .num{flex:0 0 96px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    background:var(--bg);border-right:2px solid var(--line);padding:10px 6px}
+  .layer:not(:last-child) .num::after{content:"";position:absolute;right:46px;width:2px;height:100%;
+    background:linear-gradient(var(--line),transparent)}
+  .num b{font-size:13px}
+  .num small{color:var(--muted);font-size:11px;text-align:center;margin-top:4px}
+  .body{flex:1;padding:4px 0}
+  .subs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .chip{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:#1b2029}
+  .chip.core{border-color:var(--accent);color:#cfe2ff}
+  .gate{display:inline-block;font-size:11px;color:var(--orange);border:1px dashed var(--orange);
+    padding:1px 7px;border-radius:6px;margin-left:6px}
+  /* 子技能矩阵 */
+  .sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .sk{border:1px solid var(--line);border-radius:10px;padding:12px;background:#1b2029;cursor:pointer;transition:.15s}
+  .sk:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .sk h3{font-size:13px;margin-bottom:4px}
+  .sk p{font-size:11px;color:var(--muted)}
+  .sk .route{margin-top:8px;font-size:10px;color:var(--cyan)}
+  /* 底部 */
+  .bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .ref li{font-size:12px;color:var(--muted);margin:3px 0;list-style:none;padding-left:14px;position:relative}
+  .ref li::before{content:"▸";position:absolute;left:0;color:var(--green)}
+  .mode-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .mode{flex:1;min-width:200px;border:1px solid var(--line);border-radius:10px;padding:12px;background:#1b2029}
+  .mode b{font-size:13px}
+  .mode p{font-size:11px;color:var(--muted);margin-top:4px}
+  /* 弹层 */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:30px;z-index:50}
+  .modal.show{display:flex}
+  .modal .box{background:var(--panel);border:1px solid var(--line);border-radius:14px;max-width:560px;width:100%;padding:22px;max-height:80vh;overflow:auto}
+  .modal h3{font-size:16px;margin-bottom:10px;color:var(--accent)}
+  .modal p{font-size:13px;color:var(--txt);margin-bottom:8px}
+  .close{float:right;cursor:pointer;color:var(--muted);font-size:20px;line-height:1}
+  .edges{font-size:11px;color:var(--muted);margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .edges b{color:var(--cyan)}
+</style>
+</head>
+<body>
+<h1>design-workflow ｜ 技能结构关系图谱</h1>
+<div class="sub">五层顺序工作流 · 三种调用模式 · 模块与参考资源耦合关系。点击子技能卡片查看耦合关系。</div>
+<div style="background:#1a2230;border:1px solid #2a3a52;color:#9fc0ff;font-size:12px;padding:8px 12px;border-radius:8px;margin-bottom:18px">ℹ 本图谱与 <code>SKILL.md</code> / <code>subskills/</code> 实际目录 / <code>references/来源署名/README.md</code> 同步维护；子技能以 subskills/ 实际目录为准（当前 12 个）。</div>
+
+<div class="legend">
+  <span><i class="dot" style="background:var(--accent)"></i>主流程层（modules/）</span>
+  <span><i class="dot" style="background:var(--purple)"></i>专项子技能（subskills/）</span>
+  <span><i class="dot" style="background:var(--green)"></i>参考资料（references/）</span>
+  <span><i class="dot" style="background:var(--orange)"></i>硬闸门</span>
+</div>
+
+<div class="grid">
+
+  <!-- 调用模式 -->
+  <div class="card">
+    <h2>① 三种调用模式 <span class="tag">决定门控松紧 / 探索自由度</span></h2>
+    <div class="mode-row">
+      <div class="mode"><b>模式 1 · 领域适配</b><p>默认。按载体门控，稳健落地。沿 modules 五层走，遇专项特征才路由 subskills。</p></div>
+      <div class="mode"><b>模式 2 · 吸睛</b><p>借 design-taste 注入独特品味，作为 3/4/5 层强约束，反"AI 默认观感"。</p></div>
+      <div class="mode"><b>模式 3 · AI 自主</b><p>AI 主导探索，主动打破门控，多方案对比交用户裁决。</p></div>
+    </div>
+    <div class="edges"><b>红线（三模式共有）</b>：版权 / 合规 / 平台规则 / 预算 仍硬卡，不可越过。</div>
+  </div>
+
+  <!-- 五层流程 -->
+  <div class="card">
+    <h2>② 五层顺序主流程 <span class="tag">modules/ 可编辑模块</span></h2>
+    <div class="flow">
+      <div class="layer" style="position:relative">
+        <div class="num"><b>第 1 层</b><small>场景<br>前提/边界</small></div>
+        <div class="body">
+          <div class="chip core" style="border-color:var(--orange);color:#ffd9b0">01-场景.md（合并单文件）</div>
+          <div class="subs">
+            <span class="chip">载体·环境·上下文·客观约束</span>
+            <span class="gate">硬闸门：没问清前绝不动手</span>
+          </div>
+        </div>
+      </div>
+      <div class="layer" style="position:relative">
+        <div class="num"><b>第 2 层</b><small>感知物料<br>原材料</small></div>
+        <div class="body">
+          <div class="chip core">02-感知物料/</div>
+          <div class="subs">
+            <span class="chip">文字</span><span class="chip">颜色</span><span class="chip">图片</span>
+            <span class="chip">动画</span><span class="chip">纹理</span><span class="chip">模型</span>
+          </div>
+        </div>
+      </div>
+      <div class="layer" style="position:relative">
+        <div class="num"><b>第 3 层</b><small>形式组织<br>结构语法</small></div>
+        <div class="body">
+          <div class="chip core">03-形式组织/</div>
+          <div class="subs">
+            <span class="chip">空间</span><span class="chip">关系</span><span class="chip">排版构图</span><span class="chip">镜头布局</span>
+          </div>
+        </div>
+      </div>
+      <div class="layer" style="position:relative">
+        <div class="num"><b>第 4 层</b><small>信息叙事<br>意义策略</small></div>
+        <div class="body">
+          <div class="chip core">04-信息叙事/</div>
+          <div class="subs">
+            <span class="chip">信息优先级</span><span class="chip">故事逻辑</span><span class="chip">表达意图</span>
+          </div>
+        </div>
+      </div>
+      <div class="layer" style="position:relative">
+        <div class="num"><b>第 5 层</b><small>主观输出<br>体验验收</small></div>
+        <div class="body">
+          <div class="chip core">05-主观输出/</div>
+          <div class="subs">
+            <span class="chip">感觉</span><span class="chip">情绪</span><span class="chip">心理体验</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="edges">每层文件含「上一步输入 / 本步要做 / 输出给」三段，做完用自检清单核对再进下一层；下游发现问题可回退修正。</div>
+  </div>
+
+  <!-- 子技能矩阵 -->
+  <div class="card">
+    <h2>③ 专项子技能 <span class="tag">subskills/ 按需路由，不常驻主流程</span></h2>
+    <div class="sk-grid" id="skGrid"></div>
+  </div>
+
+  <!-- 底部：参考资源 + 关系说明 -->
+  <div class="bottom">
+    <div class="card">
+      <h2>④ 参考资源 <span class="tag">references/</span></h2>
+      <ul class="ref">
+        <li>UI风格适配参考.md — 领域适配风格词库</li>
+        <li>image_gen_prompt_templates.md — 文生图 prompt 模板</li>
+        <li>chroma_key.py — 抠图键控工具</li>
+        <li>slice_grid.py — 网格切分工具</li>
+        <li>live_photo_drawon_recipe.py — 照片+线稿脚本</li>
+        <li>来源署名/（11 份）— 主技能与子技能共用的授权边界</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>⑤ 关系总览</h2>
+      <div class="edges" style="border:0;padding:0">
+        <p><b style="color:var(--accent)">主流程</b>：SKILL.md 总控 → modules/ 五层顺序执行，上一层做完才进下一层。</p>
+        <p><b style="color:var(--purple)">子技能</b>：被 SKILL.md「路由表」命中时切出，承载完整专项方法，完事回到主流程。</p>
+        <p><b style="color:var(--orange)">模式 2</b>：唯一常驻引用 design-taste（作为 3/4/5 层强约束），而非临时路由。</p>
+        <p><b style="color:var(--green)">参考资源</b>：被 modules 与 subskills 共享（脚本/词库/署名），不单独成节点。</p>
+        <p><b>通用方法论</b>：如社交卡片规则、扁平 grid、动效降级等，已吸收进对应子位置「补充」段，不单列。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 弹层 -->
+<div class="modal" id="modal"><div class="box">
+  <span class="close" onclick="closeModal()">×</span>
+  <h3 id="mTitle"></h3>
+  <p id="mDesc"></p>
+  <div class="edges" id="mEdge"></div>
+</div></div>
+
+<script>
+const SKS = [
+  {id:"design-chart",name:"design-chart",desc:"数据可视化图表专项方法论。数据形状选图主键、一图一结论、视觉编码诚实性、13 项交付自检。",
+   route:"命中：输入是数据，要可视化/做几张图/报告",edge:"来源署名：lieflat-charts.md"},
+  {id:"design-frontend",name:"design-frontend",desc:"前端/数字产品设计通用原则。结构装置即信息、反 AI 模板校准、UX 写作、动效编排时刻与语义。",
+   route:"命中：UI/网页/数字产品，要不像 AI 模板",edge:"来源署名：anthropics-frontend-design.md"},
+  {id:"design-icon-batch",name:"design-icon-batch",desc:"图标套系批量生产 + AI 生图透明背景抠图。共享几何/线宽/圆角、网格批量+逐格兜底、风格锚点验证门控。",
+   route:"命中：一套图标 / 透明背景 / 抠图去背景",edge:"工具：chroma_key.py、slice_grid.py；署名：huashu-icon-set.md"},
+  {id:"design-ip-assets",name:"design-ip-assets",desc:"专属视觉资产体系（IP 化）。角色/符号/签名色/字体人格/图形语言五位一体，固定资产可复用。内置「三果团」完整示例。",
+   route:"命中：IP 化 / 品牌识别 / 我的角色 / 签名元素",edge:"照片驱动路径 B：上传照片生成专属角色/表情包"},
+  {id:"design-metaphor-narrative",name:"design-metaphor-narrative",desc:"隐喻统摄的叙事型长页。单一隐喻统摄信息架构、门禁序章、数据字段实物替身、长页 reveal 错峰编排。",
+   route:"命中：作品集/简历/时间轴/产品故事，要走进去而非扫一眼",edge:"专项方法内建，不依赖 references 脚本"},
+  {id:"design-mobile-app",name:"design-mobile-app",desc:"移动端 App 界面/原型专项。拇指热区、safe area、一屏一焦、密度节奏、字号极端跳档+字重对比、网格对齐。",
+   route:"命中：手机 App 界面/原型，且产出像 AI 默认模板/只换皮肤不换骨架",edge:"结构手法落移动范式，改版顺序以用户指令为准"},
+  {id:"design-motion-vocabulary",name:"design-motion-vocabulary",desc:"动效术语反查词典。把 web 动效的模糊描述翻成确切术语（Pop in / Rubber-banding…）。",
+   route:"命中：问「这个动效叫什么」或描述不知名动效想找对词",edge:"命名而非设计/构建"},
+  {id:"design-photo-sketch",name:"design-photo-sketch",desc:"照片+手绘线稿叠加 / live photo draw-on。照片为基·线稿为第二叙事层、覆盖 15–35%、读图卡片。",
+   route:"命中：真实照片起点 / 加手绘线稿 / live photo",edge:"脚本：live_photo_drawon_recipe.py；署名：照片手绘线稿叠加法.md、Zeejay0-gathered-scenes-zine.md"},
+  {id:"design-prototype-divergence",name:"design-prototype-divergence",desc:"原型发散。把同一件 UI 件建成 3–5 个真正不同的版本，可视化选择器实时翻选并晋升胜出者。",
+   route:"命中：给我几个方向看看 / 这个组件有几种做法 / 发散一下",edge:"偏探索/发散，进模式 2（吸睛/探索）最顺"},
+  {id:"design-reference-sourcing",name:"design-reference-sourcing",desc:"联网找素材做参考。12 个策展源（Pinterest/爱给网需登录；其余开放直抓）+ agent-browser CLI 截图读图。",
+   route:"命中：找参考 / 配色 / 音效 / 搜案例（模式 1 默认前置）",edge:"仅参考不擅发，版权署名合规"},
+  {id:"design-taste",name:"design-taste",desc:"独特品味档案容器（模式2本体）。taste-profiles/ 品味实例强制三段式（🟦参考图事实/🟥品味维度/🚫红线），只收用户原话。",
+   route:"命中：模式 2 吸睛 / 注入独特品味 / 反套路",edge:"唯一被模式 2 常驻引用；当前实例 athens-week"},
+  {id:"design-typographic-glyph",name:"design-typographic-glyph",desc:"图形字/合字设计（以字寄形+填字共生）。墨朱三色制、图字共生四型、共享笔画、系列化延展。",
+   route:"命中：汉字寄具象图形 / 字即图做主视觉",edge:"专项方法内建，不依赖 references 脚本"},
+];
+
+const grid = document.getElementById("skGrid");
+SKS.forEach(s=>{
+  const el = document.createElement("div");
+  el.className="sk";
+  el.innerHTML = `<h3>${s.name}</h3><p>${s.desc.slice(0,28)}…</p><div class="route">${s.route}</div>`;
+  el.onclick = ()=>openModal(s);
+  grid.appendChild(el);
+});
+
+function openModal(s){
+  document.getElementById("mTitle").textContent = s.name;
+  document.getElementById("mDesc").textContent = s.desc;
+  document.getElementById("mEdge").innerHTML = `<b>路由条件</b>：${s.route}<br><b>耦合资源</b>：${s.edge}`;
+  document.getElementById("modal").classList.add("show");
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");}
+document.getElementById("modal").onclick = e=>{if(e.target.id==="modal")closeModal();};
+</script>
+</body>
+</html>
