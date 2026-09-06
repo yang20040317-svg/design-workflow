@@ -2,6 +2,29 @@
 
 记录 design-workflow 技能的版本演进。技能正文（SKILL.md 与 modules/）只保留通用方法学，不内嵌署名。
 
+## [主技能] 1.6.4 → 1.6.5 - 2026-09-06
+
+### 第二次增量吸收 emilkowalski/skills 动效方法论（用户定调：只抽通用原理、不塞工具）
+
+- **用户指令**：「github.com/emilkowalski/skills 要不要写进 design-workflow？→ 可以（只抽通用原理、不新建节点）」。
+- **改动（SKILL.md 主控 1.6.4 → 1.6.5）**：
+  - `subskills/design-frontend` 第八节新增「决策顺序与目的门控」：动效目的 6 类命名 +「命名不出就不做」+ Delight 仅限罕见层级 +「先门控后参数」的顺序纪律（来源 `animate` 第 2 步，去 IP 通用化）。
+  - `subskills/design-frontend` 末尾新增「补充 · 动效审计与组件选型纪律」：存量动效审计工作流（recon → 八维审计 → 分级定级 → 自包含计划，只读不改源码，来源 `improve-animations`）+ 组件选型纪律（先按任务语义归类、优先成熟库而非手写 div 组件、先看已装什么别引竞争依赖，来源 `pick-ui-library`，**具体库名清单不收**）。
+  - `SKILL.md` 交叉资产段加一行来源署名；`references/来源署名/emilkowalski-skills.md` 补「第二次增量吸收」记录。
+- **未吸收（去重 / 红线）**：`animate` 工具选型表（实现层）、`pick-ui-library` 具体库清单（会过时）、write-swift / ask-sonner / animate-expo（具体栈）、`prototype`（已由 `design-prototype-divergence` 覆盖）、`animation-vocabulary`（已由 `design-motion-vocabulary` 覆盖）。
+- **不受影响**：`design-taste` 未动；未新建节点；远程仓库未推送（本地改动）。
+
+## [主技能] 1.6.3 → 1.6.4 - 2026-09-06
+
+### 吸收 impeccable 通用质量底线为可勾选验收表（用户定调：只收质量底线）
+
+- **用户指令**：「把 impeccable 的哪些原理并进 design-workflow（模式1 验收段）？→ 只收质量底线」。
+- **改动（SKILL.md 主控 1.6.3 → 1.6.4）**：
+  - `references/审美精度标准.md` 末尾新增「补充 · 验收反模式表（通用质量底线 · 模式1 验收）」段：硬底线（功能文字 ≥11px / 正文 ≥14px / body 不用宽字距）+ 精选 slop 提示（过度通用字体 / 编号小节标签 / 径向光晕，冲突项标「用户可覆盖」）。阈值标注「通用参考值，非普适铁律」。
+  - 经 `design-methodology-absorber` 提取，**只抽通用原理、不引入私有 IP**；模式2 个人品味由 `design-taste` 独立掌管，本表不覆盖。
+  - `SKILL.md` 各层交叉资产段加一行来源署名（受 impeccable / Paul Bakaus, Apache-2.0 启发，已通用化重写）。
+- **不受影响**：`design-taste` 一字节未动；未新建第六类节点；远程仓库未推送（本地改动）。
+
 ## [主技能] 1.6.2 → 1.6.3 - 2026-09-05
 
 ### 五层顺序从「硬闸」改「默认路线 · 可跳层回补」（用户定调）

@@ -22,5 +22,9 @@
 
 ## 其他
 
-- 未吸收：write-swift / ask-sonner / pick-ui-library / prototype / animate-expo 等工具类 skill（与 design-workflow 领域无关或属实现层细节）。
-- 动画词汇表（animation-vocabulary）暂未并入（待评估精简版）。
+- **2026-09-06 第二次增量吸收**：本次除既有「交互工程动效对错清单」外，再吸收三条通用方法论进 `design-frontend`（去 IP 通用化，未引入私有 IP）：
+  - **动效决策门控**（来自 `animate` 第 2 步）：目的 6 类命名 + "命名不出就不做" + Delight 仅限罕见层级 + "先门控后参数"的顺序纪律。
+  - **存量动效审计工作流**（来自 `improve-animations`）：recon → 八维审计 → 分级定级 → 自包含计划，只读不改源码。
+  - **组件选型纪律**（来自 `pick-ui-library`）：先按任务语义归类、优先成熟库而非手写 div 组件、先看已装什么别引竞争依赖；**具体库名清单不收**（会过时、是他人清单、维护负担）。
+- 仍不吸收（与领域无关 / 实现层 / 具体栈 / 已由本技能既有资产覆盖）：write-swift / ask-sonner / animate-expo（React Native）等工具类；`prototype`（已由 `design-prototype-divergence` 覆盖）；`animation-vocabulary`（已由 `design-motion-vocabulary` 覆盖）。
+- 动画词汇表（animation-vocabulary）已由本技能既有 `design-motion-vocabulary` 覆盖，不再单独吸收。
