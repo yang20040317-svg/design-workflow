@@ -2,6 +2,18 @@
 
 记录 design-workflow 技能的版本演进。技能正文（SKILL.md 与 modules/）只保留通用方法学，不内嵌署名。
 
+## [主技能] 1.6.6 → 1.6.7 - 2026-09-06
+
+### 增量吸收 Jakubantalik/transitions.dev（用户定调：收进 design-frontend · 不新建节点 · 不建外部文件）
+
+- **用户指令**：「github.com/Jakubantalik/transitions.dev 怎么用？→ 他这个不属于动画层的吗？→ 可以（吸收）」。
+- **判定纠正**：初判为"纯工具/实现层"过粗；该库确有方法论内核（命名词汇 + 元素→动词→开销匹配规则 + Motion Tokens 体系），属动画层，与 emilkowalski（why）/ gsap（how）互补。
+- **改动（SKILL.md 主控 1.6.6 → 1.6.7）**：
+  - `subskills/design-frontend` 在 GSAP 段**之前**新增「补充 · 组件过渡选型参考（CSS 落地）」：去名化为「选型纪律 + 命名词汇 + token 体系」三层方法论（不粘贴具体 CSS 片段、不建节点）。
+  - `SKILL.md` 交叉资产段加一行 transitions.dev 来源署名；`references/来源署名/transitions-dev.md` 新建（吸收边界 / 未吸收项）。
+- **未吸收（红线 / 剥离）**：具体 CSS 片段源码、逐过渡私有变量、Refine 工具、transitions-pro CLI、Pro 过渡（付费）、安装命令/版本号。
+- **不受影响**：未新建子技能节点；`design-taste` 未动；远程仓库未推送（仅本地改动）。动画层顺序现为：emilkowalski 决策 → transitions.dev 选型 → gsap 实现。
+
 ## [主技能] 1.6.5 → 1.6.6 - 2026-09-06
 
 ### 增量吸收 greensock/gsap-skills（用户定调：方式1 · 收进 design-frontend · 不新建节点）

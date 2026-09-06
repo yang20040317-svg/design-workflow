@@ -160,6 +160,76 @@ version: 1.0.0
 - **简单 hover/fade 用原生 CSS**，不要为此引一个动效库。
 - 具体库随生态演进，按需查当前推荐——本技能不固化具体库名（避免过时）。
 
+## 补充 · 组件过渡选型参考（CSS 落地 · 仅组件级 CSS 过渡载体时调用）
+
+> **触发边界**：本段仅在「载体 = 网页 / Web 应用，需要做**组件级 CSS 过渡**（下拉 / 模态 / 成功 / 错误抖动 / 骨架屏 / Tab 等常见交互的进出场）」时调用。它**不替代**第八节 emilkowalski 的「该不该动 / 做对没有」——那两条是通用纪律，本段是"选哪个过渡 + 用什么节奏 token"的选型层。可与 GSAP 段并列：本段管"选哪个过渡 / 词汇与节奏 token"，GSAP 段管"用 JS 库怎么写"；两者皆须先过第八节。
+> 来源：吸收自 Jakubantalik/transitions.dev（开源 CSS 过渡库 + agent skill），已**去名化为通用选型纪律与词汇表**；具体 CSS 片段随源站演进，以官方当前版本为准，本段不粘贴源码。
+
+### 一、匹配纪律：先元素 → 再动词 → 平局按开销
+
+- **先匹配可见 UI 元素，再匹配动词**：同一"打开"动词因元素不同落不同过渡——表面从触发器生长 → `menu dropdown`（有锚点）；表面居中、无锚点 → `modal`（居中）；表面滑入页面某区 → `panel reveal`。
+- **平局按开销取舍（默认选更轻的）**：`card resize` > `panel reveal`；`dropdown` > `modal`；`success check` > 整模态庆祝。除非设计明确要求更重的表面，否则默认低开销。
+- **无清晰匹配 → 回退让人选**，不猜测塞一个过渡。
+- **组合而非堆砌**：`success check` 是纯动画；若还需从 spinner 换到对勾，须搭配 `icon swap` 组合，而非把 check 当万能庆祝。
+
+### 二、组件过渡词汇表（命名即沟通）
+
+> 把常见交互的动效**命名规范化**——命名本身就是设计词汇，避免每次"即兴发挥"导致各组件节奏散掉。下面复用率最高的核心词汇（按交互意图分组，非穷举）：
+
+| 意图 | 命名过渡 | 何时用 |
+|---|---|---|
+| 容器尺寸变化 | `card resize` | 元素宽/高随布局态变化 |
+| 数字更新 | `number pop-in` | 数值变化时逐位带模糊滑入 |
+| 触发点上方小徽标 | `notification badge` | 触发器上方悬浮小圆点弹出 |
+| 文本原地替换 | `text states swap` | 文本原地内容变更（带模糊上下移） |
+| 锚定触发器生长 | `menu dropdown` | 原点感知的下拉，从触发器长出 |
+| 居中弹出层 | `modal` | 居中、无锚点的对话框（缩放进出） |
+| 滑入页面某区 | `panel reveal` | 侧栏/抽屉滑入某区域（带交叉模糊） |
+| 双屏切换 | `page side-by-side` | 列表↔详情 / 步骤1↔步骤2 |
+| 同槽位两图标 | `icon swap` | 同一位置两个图标交叉淡入缩放 |
+| 成功/完成时刻 | `success check` | 对勾/支付完成/文件上传（淡+旋+Y浮+描边绘制） |
+| 横向堆叠悬停 | `avatar group hover` | 头像/芯片行中悬停某项（距离衰减弹起） |
+| 校验错误反馈 | `error state shake` | 表单错误/无效字段（分段 cubic-bezier 抖+自动回正） |
+| 清空文本字段 | `input clear with dissolve` | 搜索框×/筛选重置（飞出+逐词 dissolve） |
+| 占位→真实内容 | `skeleton loader and reveal` | 列表行/卡片加载后交叉淡入真实内容 |
+| 进行中"活"文本 | `shimmer text` / `thinking states` | 加载标签/流式状态（循环扫光，纯 CSS） |
+| 互斥选项移动高亮 | `tabs sliding` | 视图切换/分段控件（药丸指示跟随） |
+| 悬停/聚焦提示 | `tooltip open/close` | 图标提示/信息泡（延迟淡入、即时退出） |
+| 堆叠文字入场 | `texts reveal` | 主视觉/空状态/引导步（错落模糊升起） |
+
+### 三、Motion Tokens：节奏一致性的来源
+
+> 所有组件过渡共享一套**语义化 timing token**（不是魔法数字）——这才是"整站节奏一致"的真正机制，类比色彩/间距 token。
+
+**共享尺度（推荐基线，可据品牌微调）**
+```css
+/* Durations */
+--duration-stagger:   40ms;   /* 逐项错开偏移 */
+--duration-micro:     80ms;   /* tooltip/路径延迟、shake 段、大错开 */
+--duration-quick:    150ms;   /* modal/dropdown 关闭、text swap、tooltip 出现 */
+--duration-fast:     250ms;   /* icon swap、dropdown/modal 打开、tabs、page slide */
+--duration-medium:   350ms;   /* panel 关闭、toast 关闭 */
+--duration-slow:     400ms;   /* panel 打开、骨架揭示、input clear */
+--duration-very-slow:500ms;   /* 强调时刻、badge 出现、text reveal、success check */
+/* Easings */
+--ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1); /* 进出/位移/缩放通用 */
+--ease-in-out:     ease-in-out;   /* icon/text/text-reveal/skeleton swap */
+--ease-out:        ease-out;      /* tooltip */
+--ease-linear:     linear;        /* shimmer/skeleton pulse/spinner */
+--ease-bounce:     cubic-bezier(0.34, 1.36, 0.64, 1); /* badge pop 打开 */
+/* Distances / Scales / Blur */
+--distance-base: 8px;   --distance-medium: 12px;  --distance-large: 30px;
+--scale-small: 0.98;    --scale-medium: 0.97;     --scale-large: 0.96;
+--blur-small: 2px;      --blur-medium: 3px;       --blur-large: 8px;
+```
+
+- **按"用途"而非"原始数值"映射**：以用途对齐 token（如某关闭动效用 300ms 仍归 `--duration-quick` 若用途为"modal close"），数字接近不强行替换。
+- **每个过渡都自带 `prefers-reduced-motion` 守卫**（硬底线，删掉即过不了无障碍审计）。
+- **低开销优先 + 最小 diff**：只改必需文件，不引动效库；无框架依赖、粘贴即用。
+- **禁止 `transition: all`**：枚举精确属性，避免无关样式"搭便车"。
+
+> 注：具体每个过渡的 CSS 片段、按组件覆盖的私有变量（如 `--resize-dur`、`--badge-*`）不在此段——那是 copy-paste 资产，随源站演进；需要时从官方取当前片段。本段只固「选型纪律 + 命名词汇 + token 体系」三层方法论。
+
 ## 补充 · GSAP 落地参考（库专用 · 仅 GSAP 载体时调用）
 
 > **触发边界**：本段仅在「载体 = 网页 / Web 应用，且**已选定 GSAP** 作为动效实现库」时调用。它**不替代**第八节「交互工程对错清单」与本节上半「存量审计 / 组件选型纪律」——那两条是通用纪律，本段是 GSAP 的具体写法落地。GSAP 当前全部插件免费（含原 Club 专属的 SplitText / MorphSVG，商业可用），从公共 `gsap` npm 包安装即可。
