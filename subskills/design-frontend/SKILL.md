@@ -159,3 +159,43 @@ version: 1.0.0
 - **先看项目已装什么**：已用某库就沿用，别引入竞争依赖制造改动噪音。
 - **简单 hover/fade 用原生 CSS**，不要为此引一个动效库。
 - 具体库随生态演进，按需查当前推荐——本技能不固化具体库名（避免过时）。
+
+## 补充 · GSAP 落地参考（库专用 · 仅 GSAP 载体时调用）
+
+> **触发边界**：本段仅在「载体 = 网页 / Web 应用，且**已选定 GSAP** 作为动效实现库」时调用。它**不替代**第八节「交互工程对错清单」与本节上半「存量审计 / 组件选型纪律」——那两条是通用纪律，本段是 GSAP 的具体写法落地。GSAP 当前全部插件免费（含原 Club 专属的 SplitText / MorphSVG，商业可用），从公共 `gsap` npm 包安装即可。
+> 来源：吸收自 greensock/gsap-skills（官方 GSAP AI 技能集，MIT），已**去名化为通用写法骨架**；具体 API 参数随 GSAP 版本演进，以官方文档当前版本为准。
+
+### 一、何时选 GSAP 而非 CSS
+- 需要**时间线序列控制**（多步编排）、**运行时控制**（暂停/反转/seek）、**复杂缓动**、**滚动驱动**（ScrollTrigger）、**JS 动态计算值**时用 GSAP；极简过渡用原生 CSS 即可，不引库。
+
+### 二、核心 Tween 正确写法
+- 属性名用 **camelCase**（`backgroundColor`、`rotationX`）。
+- 优先 **transform 别名**（`x`/`y`/`scale`/`rotation`/`xPercent`）而非手写 `transform` 字符串——顺序一致、性能更稳、跨浏览器可靠。
+- **`autoAlpha` 优于 `opacity`**：值为 0 时自动 `visibility:hidden`，避免隐形元素挡点击。
+- 全局默认节奏用 `gsap.defaults({ duration: 0.6, ease: "power2.out" })` 收敛。
+
+### 三、最易错点（AI 写 GSAP 的高频坑）
+- **`from()`/`fromTo()` 的 `immediateRender`**：同一元素同一属性堆叠多个 `from` 时，后者初始态会覆盖前者——给后者设 `immediateRender: false`，保留第一个动画的终态。
+- **用 timeline + 位置参数代替 `delay` 链**：多步用 `gsap.timeline()` 与位置参数（`"+=0.2"` / `"-=0.1"` / `"<"` / 标签）编排，别用一串 `delay`。
+- **ScrollTrigger 只能挂在顶级 tween / timeline 上**，不能挂 timeline 内部的子 tween；`scrub` 与 `toggleActions` **不要同用**一个触发器（scrub 胜出，逻辑冲突）。
+- **横向滚动用 `containerAnimation` 时子动画必须 `ease:"none"`**，否则破坏滚动 1:1 映射。
+- **布局变化（新内容 / 图片 / 字体 / 动态 DOM）后调用 `ScrollTrigger.refresh()`**；视口 resize 自动处理，动态内容不会。
+- 生产移除 `markers: true`；所有插件使用前 `gsap.registerPlugin(...)` 注册一次。
+- **清理**：vanilla 用 `gsap.context()` 或 `gsap.matchMedia()` 的 `revert()` 回收；高频更新属性用 `gsap.quickTo()` 复用单 tween，别每帧 new tween。
+
+### 四、性能与降级（与第八节、第七节一致）
+- 只动 `transform` / `opacity`（GPU 友好）；`will-change` 只给真正在动的元素；离屏动画 pause/kill。
+- **无障碍**：用 `gsap.matchMedia()` 响应 `prefers-reduced-motion`——`reduceMotion` 条件为真时 `duration: 0` 或直接跳过，不位移不循环。与第七节「尊重 reduced-motion 是硬底线」同源。
+
+### 五、常用 web 插件速查（仅 vanilla/web 相关）
+| 插件 | 用途 | 一句话关键模式 |
+|---|---|---|
+| SplitText | 文本拆字/词/行做逐单位错开 | `SplitText.create(".h",{type:"chars"})` → `gsap.from(split.chars,{...stagger})` |
+| CustomEase | 内置缓动不够时自定义曲线 | `CustomEase.create("n",".17,.67,.83,.67")` 作 ease |
+| Flip | 布局状态间动画（FLIP 技术） | `state=Flip.getState()` → 改 DOM → `Flip.from(state,{...})` |
+| ScrollSmoother | 平滑滚动包装（需固定 DOM 结构） | 注册于 ScrollTrigger 之后；`#smooth-wrapper > #smooth-content` |
+| ScrollToPlugin | 滚动到某元素/坐标（非 ScrollTrigger 场景） | `gsap.to(window,{scrollTo:{y:"#sec"}})` |
+| Draggable+Inertia | 拖拽与释放动量 | `Draggable.create(".b",{type:"x,y",inertia:true})` |
+| MorphSVG / MotionPath | SVG 形变 / 沿路径运动 | `morphSVG:"#target"` / `motionPath:{path:"#p"}` |
+
+> 注：React/Vue/Svelte 框架适配、gsap.utils 辅助函数等不在此段（属框架/工具层）；本段只固「易错纪律 + 关键骨架」，避免随版本过期。设计感网页的 GSAP 动效仍须先过第八节「该不该动 / 做对没有」与第五~七节「编排时刻 / 语义 / 性能降级」，GSAP 只是实现手段，不豁免设计纪律。

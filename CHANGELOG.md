@@ -2,6 +2,17 @@
 
 记录 design-workflow 技能的版本演进。技能正文（SKILL.md 与 modules/）只保留通用方法学，不内嵌署名。
 
+## [主技能] 1.6.5 → 1.6.6 - 2026-09-06
+
+### 增量吸收 greensock/gsap-skills（用户定调：方式1 · 收进 design-frontend · 不新建节点）
+
+- **用户指令**：「github.com/greensock/gsap-skills 怎么用？→ 不能作为子技能写进去吗？→ 1（收进 design-frontend）」。
+- **改动（SKILL.md 主控 1.6.5 → 1.6.6）**：
+  - `subskills/design-frontend` 末尾新增「补充 · GSAP 落地参考（库专用 · 仅 GSAP 载体时调用）」：去名化为「易错纪律 + 关键 API 骨架」，含何时选 GSAP、核心 Tween 正确写法、最易错点（immediateRender 堆叠 / timeline 取代 delay 链 / ScrollTrigger 只能挂顶级 / scrub 与 toggleActions 不混用 / containerAnimation 用 ease:"none" / refresh 时机 / 清理）、性能与 reduced-motion 降级、web 插件速查表。
+  - `SKILL.md` 交叉资产段加一行 GSAP 来源署名；`references/来源署名/greensock-gsap-skills.md` 新建（吸收边界 / 未吸收项）。
+- **未吸收（红线 / 去重）**：`gsap-react` / `gsap-frameworks`（框架层）、`gsap-utils`（工具层）、安装命令 / marketplace 配置 / 具体版本号（实现层会过时）。
+- **不受影响**：未新建子技能节点；`design-taste` 未动；远程仓库未推送（仅本地改动）。
+
 ## [主技能] 1.6.4 → 1.6.5 - 2026-09-06
 
 ### 第二次增量吸收 emilkowalski/skills 动效方法论（用户定调：只抽通用原理、不塞工具）
